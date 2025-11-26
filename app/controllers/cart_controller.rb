@@ -1,3 +1,5 @@
+require "ostruct"
+
 class CartController < ApplicationController
 
   def show
