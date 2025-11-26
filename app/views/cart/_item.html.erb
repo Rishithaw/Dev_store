@@ -1,0 +1,15 @@
+<tr>
+  <td><%= link_to item.product.name, product_path(item.product) %></td>
+
+  <td>$<%= item.product.price %></td>
+
+  <td><%= item.quantity %></td>
+
+  <td>$<%= item.total_price %></td>
+
+  <td>
+    <%= button_to "Remove",
+                  cart_remove_path(item.product.id),
+                  method: :post %>
+  </td>
+</tr>

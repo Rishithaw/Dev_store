@@ -1,0 +1,61 @@
+<h1>Your Cart</h1>
+
+<% if @cart_items.empty? %>
+  <p>Your cart is empty.</p>
+  <%= link_to "Browse Products", products_path, class: "btn btn-primary" %>
+<% else %>
+
+  <table style="width: 100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th style="padding: 8px; border-bottom: 1px solid #ccc;">Product</th>
+        <th style="padding: 8px; border-bottom: 1px solid #ccc;">Price</th>
+        <th style="padding: 8px; border-bottom: 1px solid #ccc;">Quantity</th>
+        <th style="padding: 8px; border-bottom: 1px solid #ccc;">Total</th>
+        <th style="padding: 8px; border-bottom: 1px solid #ccc;">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @cart_items.each do |item| %>
+        <tr>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">
+            <%= link_to item.product.name, product_path(item.product) %>
+          </td>
+
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">
+            $<%= item.product.price %>
+          </td>
+
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">
+            <%= item.quantity %>
+          </td>
+
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">
+            $<%= item.total_price %>
+          </td>
+
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">
+            <%= button_to "Remove",
+                          cart_remove_path(item.product.id),
+                          method: :post,
+                          class: "btn btn-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <br>
+
+  <h2>Cart Total: $<%= @cart_total %></h2>
+
+  <%= button_to "Clear Cart",
+                cart_clear_path,
+                method: :post,
+                class: "btn btn-danger",
+                style: "margin-right: 10px;" %>
+
+  <%= link_to "Continue Shopping", products_path, class: "btn btn-primary" %>
+
+<% end %>
