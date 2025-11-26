@@ -4,20 +4,25 @@ class ProductsController < ApplicationController
   def index
     @categories = Category.all
 
-    # Starts with ordered list
+    # Start with all products, paginated
     @products = Product.order(created_at: :desc)
 
-    # Category filter
-    if params[:category_id].present?
-      @products = @products.where(category_id: params[:category_id])
+    # --- KEYWORD SEARCH ---
+    if params[:keyword].present?
+      keyword = "%#{params[:keyword]}%"
+      @products = @products.where("name ILIKE ? OR description ILIKE ?", keyword, keyword)
     end
 
-    # Applies pagination LAST so it paginates the filtered relation
+    # --- OPTIONAL CATEGORY FILTER ---
+    if params[:search_category_id].present?
+      @products = @products.where(category_id: params[:search_category_id])
+    end
+
+    # Paginate after filters applied
     @products = @products.page(params[:page]).per(12)
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @product = Product.new
@@ -32,8 +37,7 @@ class ProductsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @product.update(product_params)
