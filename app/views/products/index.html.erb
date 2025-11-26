@@ -3,33 +3,24 @@
 <h2 class="my-4">Search Products</h2>
 
 <%= form_with url: products_path, method: :get, local: true, class: "mb-4" do %>
-  <div style="display: flex; gap: 10px;">
+  <div style="display: flex; gap: 10px; align-items: center;">
+
     <!-- Keyword Search -->
     <%= text_field_tag :keyword, params[:keyword],
         placeholder: "Search by name or description...",
-        class: "form-control" %>
+        class: "form-control",
+        style: "flex: 1;" %>
 
     <!-- Category Dropdown -->
     <%= select_tag :search_category_id,
-        options_for_select([["All Categories", ""]] +
-                            @categories.map { |c| [c.name, c.id] },
-                            params[:search_category_id]),
-        class: "form-select" %>
+        options_for_select(
+          [["All Categories", ""]] + @categories.map { |c| [c.name, c.id] },
+          params[:search_category_id]
+        ),
+        class: "form-select",
+        style: "width: 200px;" %>
 
     <%= submit_tag "Search", class: "btn btn-primary" %>
-  </div>
-<% end %>
-
-<!-- Category Filter -->
-<%= form_with url: products_path, method: :get, local: true do %>
-  <div style="margin-bottom: 20px;">
-    <%= label_tag :category_id, "Filter by Category:" %>
-
-    <%= select_tag :category_id,
-        options_from_collection_for_select(@categories, :id, :name, params[:category_id]),
-        include_blank: "All Categories" %>
-
-    <%= submit_tag "Search" %>
   </div>
 <% end %>
 
@@ -52,5 +43,5 @@
   </div>
 
 <% else %>
-  <p>No products found in this category.</p>
+  <p>No products found.</p>
 <% end %>
