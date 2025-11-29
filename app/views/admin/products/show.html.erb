@@ -1,0 +1,23 @@
+<h1><%= @product.name %></h1>
+
+<p><strong>Description:</strong> <%= @product.description %></p>
+<p><strong>Category:</strong> <%= @product.category&.name %></p>
+<p><strong>Price:</strong> $<%= @product.base_price %></p>
+<p><strong>Stock:</strong> <%= @product.stock_quantity %></p>
+<p><strong>Product Type:</strong> <%= @product.product_type %></p>
+
+<p><strong>Image:</strong><br>
+  <% if @product.image.attached? %>
+    <%= image_tag @product.image.variant(resize_to_limit: [300, 300]) %>
+  <% else %>
+    No Image
+  <% end %>
+</p>
+
+<br>
+
+<%= link_to "Edit", edit_admin_product_path(@product) %> |
+<%= link_to "Delete", admin_product_path(@product),
+      method: :delete,
+      data: { confirm: "Are you sure?" } %> |
+<%= link_to "Back", admin_products_path %>
