@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :customers
   # Admin authentication and dashboard
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
