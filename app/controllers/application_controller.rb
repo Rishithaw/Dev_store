@@ -2,13 +2,13 @@ class ApplicationController < ActionController::Base
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
   before_action :configure_permitted_parameters, if: :devise_controller?
+  helper_method :current_user, :user_signed_in?
 
   protected
 
   def configure_permitted_parameters
     added_attrs = [
-      :username, :address, :city, :postal_code,
-      :email, :password, :password_confirmation, :remember_me
+      :username, :shipping_street, :shipping_city, :shipping_province_id, :shipping_postal_code, :email, :password, :password_confirmation
     ]
 
     devise_parameter_sanitizer.permit(:sign_up, keys: added_attrs)

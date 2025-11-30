@@ -2,6 +2,16 @@
 
 <h2 class="my-4">Search Products</h2>
 
+<div style="text-align: right; margin-bottom: 20px;">
+  <% if user_signed_in? %>
+    <span>Welcome, <%= current_user.email %>!</span>
+    <%= link_to "Logout", destroy_user_session_path, method: :delete, class: "btn btn-danger", style: "margin-left: 10px;" %>
+  <% else %>
+    <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary", style: "margin-right: 10px;" %>
+    <%= link_to "Login", new_user_session_path, class: "btn btn-secondary" %>
+  <% end %>
+</div>
+
 <%= form_with url: products_path, method: :get, local: true, class: "mb-4" do %>
   <div style="display: flex; gap: 10px; align-items: center;">
     <%= text_field_tag :keyword, params[:keyword],
