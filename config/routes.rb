@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "checkout/index"
+  get "checkout/invoice"
+  get "checkout/complete"
   devise_for :users
   # Admin authentication and dashboard
   devise_for :admin_users, ActiveAdmin::Devise.config
@@ -22,4 +25,17 @@ Rails.application.routes.draw do
   # Quantity controls
   post "cart/increase/:id",  to: "cart#increase", as: "cart_increase"
   post "cart/decrease/:id",  to: "cart#decrease", as: "cart_decrease"
+
+  resource :checkout, only: [] do
+    get :address
+    post :address
+    get :invoice
+    post :complete
+  end
+
+  get "checkout", to: "checkout#index"
+  post "checkout/confirm", to: "checkout#confirm"
+  post "checkout/complete", to: "checkout#complete"
+
+
 end

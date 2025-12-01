@@ -1,0 +1,56 @@
+<h1>Invoice</h1>
+
+<% address = @address %>
+
+<h3>Shipping To:</h3>
+<p>
+  <strong><%= address.street %></strong><br>
+  <%= address.city %>, <%= address.province.abbreviation %><br>
+  <%= address.postal_code %>
+</p>
+
+<hr>
+
+<h2>Order Summary</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Qty</th>
+      <th>Price</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cart_items.each do |product| %>
+      <% qty = session[:cart][product.id.to_s] %>
+      <tr>
+        <td><%= product.name %></td>
+        <td><%= qty %></td>
+        <td>$<%= product.price %></td>
+        <td>$<%= product.price * qty %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<hr>
+
+<h3>Subtotal: $<%= @subtotal %></h3>
+<p>GST: $<%= @gst %></p>
+<p>PST: $<%= @pst %></p>
+<p>HST: $<%= @hst %></p>
+
+<h2>Total: <strong>$<%= @total %></strong></h2>
+
+<br>
+
+<%= button_to "Complete Order",
+              complete_checkout_path,
+              method: :post,
+              class: "btn btn-success btn-lg" %>
+
+<%= link_to "Back to Address", address_checkout_path,
+            class: "btn btn-secondary" %>
