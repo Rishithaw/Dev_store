@@ -34,8 +34,10 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(product_params)
     if @product.save
+      flash[:success] = "Product added successfully!"
       redirect_to @product, notice: "Product created!"
     else
+      flash[:error_list] = @product.errors.full_messages
       render :new, status: :unprocessable_entity
     end
   end

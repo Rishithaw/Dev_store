@@ -9,6 +9,20 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <% flash.each do |key, value| %>
+      <div class="flash <%= key %>">
+        <% if value.is_a?(Array) %>
+          <ul>
+            <% value.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p><%= value %></p>
+        <% end %>
+      </div>
+    <% end %>
+
     <%= yield :head %>
 
     <!-- Favicon -->
@@ -17,7 +31,6 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-
   </head>
 
   <body>

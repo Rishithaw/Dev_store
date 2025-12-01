@@ -7,6 +7,13 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   layout "application"
 
+  before_action :track_visits
+
+  def track_visits
+    session[:visits] ||= 0
+    session[:visits] += 1
+  end
+
 
   protected
 
