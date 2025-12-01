@@ -1,63 +1,86 @@
-<h2>Create Your Account</h2>
+<h1>
+  <%= link_to "← Back", products_path, style: "margin-right: 15px; text-decoration: none;" %>
+  Create Your Account
+</h1>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
-  <div class="field">
-    <%= f.label :username %><br />
-    <%= f.text_field :username, autofocus: true, required: true %>
+  <!-- USERNAME -->
+  <div>
+    <%= f.label :username %><br>
+    <%= f.text_field :username, required: true %>
   </div>
 
   <hr>
 
+  <!-- SHIPPING -->
   <h3>Shipping Address</h3>
 
-  <div class="field">
-    <%= f.label :shipping_street, "Street Address" %><br />
+  <div>
+    <%= f.label :shipping_street, "Street Address" %><br>
     <%= f.text_field :shipping_street, required: true %>
   </div>
 
-  <div class="field">
-    <%= f.label :shipping_city, "City" %><br />
+  <div>
+    <%= f.label :shipping_city, "City" %><br>
     <%= f.text_field :shipping_city, required: true %>
   </div>
 
-  <div class="field">
-    <%= f.label :shipping_province_id, "Province" %><br />
-    <%= f.collection_select :shipping_province_id, Province.all, :id, :name,
-          prompt: "Select a province", required: true %>
+  <div>
+    <%= f.label :shipping_province_id, "Province" %><br>
+    <%= f.select :shipping_province_id, [
+      ["Alberta", 1],
+      ["British Columbia", 2],
+      ["Manitoba", 3],
+      ["New Brunswick", 4],
+      ["Newfoundland and Labrador", 5],
+      ["Nova Scotia", 6],
+      ["Ontario", 7],
+      ["Prince Edward Island", 8],
+      ["Quebec", 9],
+      ["Saskatchewan", 10],
+      ["Northwest Territories", 11],
+      ["Nunavut", 12],
+      ["Yukon", 13]
+    ], prompt: "Select a province", required: true %>
   </div>
 
-  <div class="field">
-    <%= f.label :shipping_postal_code, "Postal Code" %><br />
+  <div>
+    <%= f.label :shipping_postal_code, "Postal Code" %><br>
     <%= f.text_field :shipping_postal_code, required: true %>
   </div>
 
   <hr>
 
+  <!-- LOGIN INFO -->
   <h3>Login Credentials</h3>
 
-  <div class="field">
-    <%= f.label :email %><br />
+  <div>
+    <%= f.label :email %><br>
     <%= f.email_field :email, required: true %>
   </div>
 
-  <div class="field">
+  <div>
     <%= f.label :password %>
     <% if @minimum_password_length %>
       <em>(minimum <%= @minimum_password_length %> characters)</em>
-    <% end %><br />
-    <%= f.password_field :password, required: true, autocomplete: "new-password" %>
+    <% end %><br>
+    <%= f.password_field :password, autocomplete: "new-password", required: true %>
   </div>
 
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
+  <div>
+    <%= f.label :password_confirmation %><br>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true %>
   </div>
 
-  <div class="actions">
-    <%= f.submit "Create Account" %>
-  </div>
+  <br>
+  <%= f.submit "Create Account" %>
 <% end %>
 
-<%= render "devise/shared/links" %>
+<br>
+
+<p>
+  Already have an account?
+  <%= link_to "Sign in", new_user_session_path %>
+</p>
