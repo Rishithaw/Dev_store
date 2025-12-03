@@ -1,5 +1,5 @@
 <%= form_with url: products_path, method: :get, local: true do |f| %>
-  <div>
+  <div style="display: flex; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
 
     <!-- Keyword -->
     <div>
@@ -29,7 +29,7 @@
     </div>
 
     <!-- Submit -->
-    <div>
+    <div style="align-self: end;" >
       <%= f.submit "Search", class: "btn btn-primary" %>
     </div>
 
