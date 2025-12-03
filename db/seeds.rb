@@ -254,4 +254,6 @@ end
 
 puts "Provinces created."
 
+load Rails.root.join("db", "seeds", "import_scraped.rb")
+
 puts "Seed complete!"
