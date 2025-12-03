@@ -2,24 +2,32 @@ class CheckoutsController < ApplicationController
   before_action :authenticate_user!
   before_action :load_cart
   before_action :load_cart_items
-
-  def load_cart_items
-    @cart_items = Product.where(id: @cart.keys)
-  end
+  before_action :ensure_cart_not_empty
 
   def address
-    @address = current_customer&.address || Address.new
+    @address = current_user.addresses.find_by(is_default: true) ||
+               current_user.addresses.build
+
     @provinces = Province.all
   end
 
   def save_address
-    @address = current_user.address || current_user.build_address
+    @address = current_user.addresses.find_by(is_default: true) ||
+               current_user.addresses.build
+
+    @address.is_default = true
 
     if @address.update(address_params)
       redirect_to review_checkout_path, notice: "Address saved successfully!"
     else
+      @provinces = Province.all
       render :address, status: :unprocessable_entity
     end
+  end
+
+  def review
+    @address = current_user.addresses.find_by(is_default: true)
+    @cart_items = @cart_items # already loaded
   end
 
   def confirm
@@ -27,10 +35,11 @@ class CheckoutsController < ApplicationController
     province = @address.province
 
     @subtotal = @cart_items.sum { |p| p.price * @cart[p.id.to_s] }
-    @gst = @subtotal * (province.gst || 0)
-    @pst = @subtotal * (province.pst || 0)
-    @hst = @subtotal * (province.hst || 0)
-    @total = @subtotal + @gst + @pst + @hst
+    @gst      = @subtotal * (province.gst || 0)
+    @pst      = @subtotal * (province.pst || 0)
+    @hst      = @subtotal * (province.hst || 0)
+
+    @total    = @subtotal + @gst + @pst + @hst
   end
 
   def complete
@@ -66,15 +75,20 @@ class CheckoutsController < ApplicationController
     render :complete
   end
 
-  def review
-    @address = current_customer&.address
-    @cart_items = @cart.cart_items.includes(:product)
-  end
-
   private
 
   def load_cart
     @cart = current_cart
+  end
+
+  def load_cart_items
+    @cart_items = Product.where(id: @cart.keys)
+  end
+
+  def ensure_cart_not_empty
+    if @cart.blank?
+      redirect_to products_path, alert: "Your cart is empty."
+    end
   end
 
   def address_params

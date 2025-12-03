@@ -1,0 +1,58 @@
+<h1>Review Your Order</h1>
+
+<!-- Shipping Address -->
+<section>
+  <h2>Shipping Address</h2>
+  <% if @address.present? %>
+    <p>
+      <strong>Street:</strong> <%= @address.street %><br>
+      <strong>City:</strong> <%= @address.city %><br>
+      <strong>Postal Code:</strong> <%= @address.postal_code %><br>
+      <strong>Province:</strong> <%= @address.province.name if @address.province %>
+    </p>
+    <%= link_to "Edit Address", address_checkout_path, class: "btn btn-secondary" %>
+  <% else %>
+    <p>No shipping address found.</p>
+    <%= link_to "Add Address", address_checkout_path, class: "btn btn-primary" %>
+  <% end %>
+</section>
+
+<hr>
+
+<!-- Cart Items -->
+<section>
+  <h2>Cart Items</h2>
+  <% if @cart_items.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @cart_items.each do |product| %>
+          <% quantity = @cart[product.id.to_s] || 0 %>
+          <tr>
+            <td><%= product.name %></td>
+            <td><%= quantity %></td>
+            <td>$<%= number_with_precision(product.price, precision: 2) %></td>
+            <td>$<%= number_with_precision(product.price * quantity, precision: 2) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>Your cart is empty.</p>
+  <% end %>
+</section>
+
+<hr>
+
+<!-- Proceed Button -->
+<section>
+  <%= link_to "Proceed to Confirm", confirm_checkout_path, class: "btn btn-primary" %>
+  <%= link_to "Back to Cart", cart_path, class: "btn btn-secondary" %>
+</section>
