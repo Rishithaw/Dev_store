@@ -13,6 +13,7 @@ category_names = [
   "Mice",
   "Workspace",
   "Lighting",
+  "Laptops",
   "Digital"
 ]
 
@@ -178,6 +179,9 @@ manual_products.each { |p| Product.create!(p) }
 
 puts "Manual products created."
 
+# --------------------------
+# FIXED DYNAMIC PRODUCT LOOP
+# --------------------------
 
 100.times do
   category = categories.values.sample
@@ -187,22 +191,37 @@ puts "Manual products created."
     product_name = (PHYSICAL_KEYBOARD_NAMES + KEYCAP_SETS).sample
     product_type = "physical"
     base_price = rand(40..180)
+
   when "Mice"
     product_name = DEV_MICE.sample
     product_type = "physical"
     base_price = rand(30..150)
+
   when "Workspace"
     product_name = WORKSPACE_ITEMS.sample
     product_type = "physical"
     base_price = rand(20..120)
+
   when "Lighting"
     product_name = LIGHTING_ITEMS.sample
     product_type = "physical"
     base_price = rand(20..200)
+
   when "Digital"
     product_name = DIGITAL_ASSETS.sample
     product_type = "digital"
     base_price = rand(10..80)
+
+  when "Laptops"
+    product_name = "Laptop Model #{rand(1000..9999)}"
+    product_type = "physical"
+    base_price = rand(400..2500)
+
+  else
+    # fallback to avoid nil errors
+    product_name = "Generic Item #{rand(1000..9999)}"
+    product_type = "physical"
+    base_price = rand(10..100)
   end
 
   Product.create!(
@@ -214,7 +233,6 @@ puts "Manual products created."
     digital_file_url: product_type == "digital" ? "/downloads/#{Faker::Lorem.word}.zip" : nil,
     digital_file_size: product_type == "digital" ? rand(10..120) : nil,
     category_id: category.id,
-
     on_sale: [true, false].sample,
     featured: [true, false].sample
   )

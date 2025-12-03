@@ -11,7 +11,6 @@ module Scrapers
       @items = []
     end
 
-    # Scrape laptops category as an example
     def scrape_laptops
       url = "#{BASE}/computers/laptops"
       doc = fetch_doc(url)
@@ -24,9 +23,7 @@ module Scrapers
         description = (thumb.at_css(".description")&.text || "").strip
         price_text = (thumb.at_css(".price")&.text || "").gsub(/[^\d\.]/, "")
         base_price = price_text.present? ? price_text.to_f : 0.0
-
-        # A simple category mapping, you can refine
-        category_name = "Mechanical Keyboards" # <- change as needed for your app mapping
+        category_name = "Laptops"
 
         @items << {
           name: name,
