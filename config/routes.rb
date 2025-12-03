@@ -1,45 +1,33 @@
 Rails.application.routes.draw do
-  get "checkout/index"
-  get "checkout/invoice"
-  get "checkout/complete"
   devise_for :users
-  # Admin authentication and dashboard
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-  # Products
   resources :products
 
-  # Root path
   root "products#index"
 
-  # Health check
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Cart routes
-  get  "cart",               to: "cart#show",    as: "cart"
-  post "cart/add/:id",       to: "cart#add",     as: "cart_add"
-  post "cart/remove/:id",    to: "cart#remove",  as: "cart_remove"
-  post "cart/clear",         to: "cart#clear",   as: "cart_clear"
+  get "cart", to: "cart#show", as: "cart"
+  post "cart/add/:id", to: "cart#add", as: "cart_add"
+  post "cart/remove/:id", to: "cart#remove", as: "cart_remove"
+  post "cart/clear", to: "cart#clear", as: "cart_clear"
 
-  # Quantity controls
-  post "cart/increase/:id",  to: "cart#increase", as: "cart_increase"
-  post "cart/decrease/:id",  to: "cart#decrease", as: "cart_decrease"
+  post "cart/increase/:id", to: "cart#increase", as: "cart_increase"
+  post "cart/decrease/:id", to: "cart#decrease", as: "cart_decrease"
+  post "checkout/save_address", to: "checkouts#save_address", as: :save_address_checkout
 
   get "/pages/:slug", to: "pages#show", as: :page
-  get "/about",   to: "pages#show", defaults: { slug: "about" },   as: :about
+  get "/about", to: "pages#show", defaults: { slug: "about" }, as: :about
   get "/contact", to: "pages#show", defaults: { slug: "contact" }, as: :contact
 
-
-  resource :checkout, only: [] do
+  resource :checkout, controller: "checkouts", only: [] do
     get :address
-    post :address
-    get :invoice
+    post :address, action: :save_address
+
+    get :review
+    get :confirm
     post :complete
   end
-
-  get "checkout", to: "checkout#index"
-  post "checkout/confirm", to: "checkout#confirm"
-  post "checkout/complete", to: "checkout#complete"
-
 end

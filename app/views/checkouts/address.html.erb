@@ -1,0 +1,39 @@
+<h1>Shipping Address</h1>
+
+<div class="card p-4 shadow-sm">
+  <%= form_with model: @address, url: address_checkout_path, method: :post, local: true do |f| %>
+    <% if @address.errors.any? %>
+      <div class="alert alert-danger">
+        <h4>There were problems with your address:</h4>
+        <ul>
+          <% @address.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= f.label :street %>
+      <%= f.text_field :street, class: "form-control", required: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :city %>
+      <%= f.text_field :city, class: "form-control", required: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :postal_code %>
+      <%= f.text_field :postal_code, class: "form-control", required: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :province_id, "Province" %>
+      <%= f.collection_select :province_id, @provinces, :id, :name,
+            { prompt: "Select province" }, class: "form-select", required: true %>
+    </div>
+
+    <%= f.submit "Save & Continue", class: "btn btn-primary" %>
+  <% end %>
+</div>

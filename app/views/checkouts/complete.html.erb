@@ -1,0 +1,39 @@
+<h1 class="mb-4">Order Complete</h1>
+
+<% if @last_order %>
+  <div class="card p-4 shadow-sm mb-4">
+
+    <p class="lead">
+      Thank you! Your order
+      <strong>#<%= @last_order.id %></strong>
+      has been successfully placed.
+    </p>
+
+    <hr>
+
+    <h4>Order Summary</h4>
+
+    <p><strong>Placed at:</strong> <%= @last_order.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+    <p><strong>Payment reference:</strong> <%= @last_order.payment_reference %></p>
+
+    <p><strong>Shipping Address:</strong><br>
+      <%= @last_order.shipping_street %><br>
+      <%= @last_order.shipping_city %>,
+      <%= @last_order.shipping_province.abbreviation %><br>
+      <%= @last_order.shipping_postal_code %>
+    </p>
+
+    <hr>
+
+    <%= link_to "Back to Products", products_path, class: "btn btn-secondary" %>
+    <%= link_to "View Another Order", orders_path, class: "btn btn-outline-primary" if defined?(orders_path) %>
+
+  </div>
+
+<% else %>
+  <div class="alert alert-warning">
+    <p>No order information available.</p>
+  </div>
+
+  <%= link_to "Back to Products", products_path, class: "btn btn-primary" %>
+<% end %>
