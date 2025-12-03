@@ -2,10 +2,9 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :edit, :update, :destroy ]
 
   def index
-    @products = Product.all
     @categories = Category.all
 
-    # Start with all products, paginated
+    # Start with newest first
     @products = Product.order(created_at: :desc)
 
     # --- KEYWORD SEARCH ---
@@ -14,12 +13,24 @@ class ProductsController < ApplicationController
       @products = @products.where("name ILIKE ? OR description ILIKE ?", keyword, keyword)
     end
 
-    # --- OPTIONAL CATEGORY FILTER ---
+    # --- CATEGORY FILTER ---
     if params[:search_category_id].present?
       @products = @products.where(category_id: params[:search_category_id])
     end
 
-    # Paginate after filters applied
+    # --- PRODUCT FILTERS ---
+    case params[:filter]
+    when "on_sale"
+      @products = @products.where(on_sale: true)
+    when "new"
+      @products = @products.where("created_at >= ?", 3.days.ago)
+    when "updated"
+      @products = @products
+                    .where("updated_at >= ?", 3.days.ago)
+                    .where("created_at < updated_at") # prevents NEW products from showing as UPDATED
+    end
+
+    # Paginate after all filters
     @products = @products.page(params[:page]).per(12)
   end
 

@@ -1,19 +1,44 @@
-<%= form_with url: products_path, method: :get, local: true, class: "mb-4" do %>
-  <div style="display: flex; gap: 10px; align-items: center;">
+<%= form_with url: products_path, method: :get, local: true do |f| %>
+  <div style="display: flex; gap: 20px; align-items: center;">
 
-    <%= text_field_tag :keyword, params[:keyword],
-        placeholder: "Search by name or description...",
-        class: "form-control",
-        style: "flex: 1;" %>
+    <!-- Keyword -->
+    <div>
+      <%= f.label :keyword, "Search" %><br>
+      <%= f.text_field :keyword, value: params[:keyword] %>
+    </div>
 
-    <%= select_tag :search_category_id,
-        options_for_select(
-          [["All Categories", ""]] + @categories.map { |c| [c.name, c.id] },
-          params[:search_category_id]
-        ),
-        class: "form-select",
-        style: "width: 200px;" %>
+    <!-- Category -->
+    <div>
+      <%= f.label :search_category_id, "Category" %><br>
+      <%= f.collection_select :search_category_id, @categories, :id, :name,
+          include_blank: "All Categories",
+          selected: params[:search_category_id] %>
+    </div>
 
-    <%= submit_tag "Search", class: "btn btn-primary" %>
+    <!-- Filter type -->
+    <div>
+      <%= f.label :filter, "Filter Products" %><br>
+      <%= f.select :filter,
+        [
+          ["On Sale", "on_sale"],
+          ["New (Added ≤3 days)", "new"],
+          ["Recently Updated (≤3 days)", "updated"]
+        ],
+        include_blank: "None",
+        selected: params[:filter] %>
+    </div>
+
+    <!-- Submit -->
+    <div>
+      <%= f.submit "Search", class: "btn btn-primary" %>
+    </div>
+
+    <!-- Clear Filters -->
+    <% if params[:keyword].present? || params[:search_category_id].present? || params[:filter].present? %>
+      <div>
+        <%= link_to "Clear Filters", products_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+
   </div>
 <% end %>

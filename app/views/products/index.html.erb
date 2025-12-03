@@ -8,6 +8,15 @@
 
 <%= render "products/search_form" %>
 
+<h3>Filters</h3>
+
+<div style="margin-bottom: 20px;">
+  <%= link_to "All Products", products_path, class: "btn btn-secondary" %>
+  <%= link_to "On Sale", products_path(filter: "on_sale"), class: "btn btn-primary" %>
+  <%= link_to "New (Last 3 Days)", products_path(filter: "new"), class: "btn btn-primary" %>
+  <%= link_to "Recently Updated", products_path(filter: "recently_updated"), class: "btn btn-primary" %>
+</div>
+
 <hr>
 
 <% if @products.any? %>

@@ -28,6 +28,15 @@ class Product < ApplicationRecord
 
   validates :digital_file_url, presence: true, if: -> { product_type == "digital" }
 
+  scope :on_sale, -> { where("sale_price IS NOT NULL AND sale_price < price") }
+
+  scope :new_products, -> { where("created_at >= ?", 3.days.ago) }
+
+  scope :recently_updated, -> {
+    where("updated_at >= ?", 3.days.ago)
+      .where.not(id: new_products.select(:id))
+}
+
   def self.ransackable_attributes(auth_object = nil)
     [
       "name", "description", "base_price", "category_id",
