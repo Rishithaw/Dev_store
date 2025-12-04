@@ -1,22 +1,23 @@
 <%= form_with url: products_path, method: :get, local: true do |f| %>
-  <div style="display: flex; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+  <div class="row g-3">
 
     <!-- Keyword -->
-    <div>
+    <div class="col-12 col-md-3">
       <%= f.label :keyword, "Search" %><br>
-      <%= f.text_field :keyword, value: params[:keyword] %>
+      <%= f.text_field :keyword, value: params[:keyword], class: "form-control" %>
     </div>
 
     <!-- Category -->
-    <div>
+    <div class="col-12 col-md-3">
       <%= f.label :search_category_id, "Category" %><br>
       <%= f.collection_select :search_category_id, @categories, :id, :name,
           include_blank: "All Categories",
-          selected: params[:search_category_id] %>
+          selected: params[:search_category_id],
+          class: "form-select" %>
     </div>
 
     <!-- Filter type -->
-    <div>
+    <div class="col-12 col-md-3">
       <%= f.label :filter, "Filter Products" %><br>
       <%= f.select :filter,
         [
@@ -25,18 +26,19 @@
           ["Recently Updated (≤3 days)", "updated"]
         ],
         include_blank: "None",
-        selected: params[:filter] %>
+        selected: params[:filter],
+        class: "form-select" %>
     </div>
 
     <!-- Submit -->
-    <div style="align-self: end;" >
-      <%= f.submit "Search", class: "btn btn-primary" %>
+    <div class="col-6 col-md-2 d-flex align-items-end">
+      <%= f.submit "Search", class: "btn btn-primary w-100" %>
     </div>
 
     <!-- Clear Filters -->
     <% if params[:keyword].present? || params[:search_category_id].present? || params[:filter].present? %>
-      <div style="align-self: end;" >
-        <%= link_to "Clear Filters", products_path, class: "btn btn-secondary" %>
+      <div class="col-6 col-md-1 d-flex align-items-end">
+        <%= link_to "Clear", products_path, class: "btn btn-secondary w-100" %>
       </div>
     <% end %>
 
